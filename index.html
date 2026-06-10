@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <title>Kỳ Môn Độn Giáp – Hà Đồ – TIEN.TQN</title>
+  <style>
+    /* =========================================
+       CSS TỐI ƯU HIỂN THỊ ĐIỆN THOẠI / FOLD / IPAD
+       Phong cách Tinh tế, Thanh mảnh, Cổ điển
+       ========================================= */
+    :root {
+      --bg: #f4f6f8;
+      --paper: #ffffff;
+      --surface: #fafafa;
+      --border: #dcdfe4;
+      --line: #e2e8f0;
+      --text-main: #333333;
+      --text-muted: #6b7280;
+      --accent: #8a1f1f;
+      --accent-hover: #7f1d1d;
+      --good: #0f766e;
+      --bad: #b42318;
+      --shadow-sm: 0 2px 6px rgba(0,0,0,0.04);
+      --radius-lg: 12px;
+      --radius-md: 8px;
+      --radius-sm: 4px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text-main);
+      /* Sử dụng font có chân cho cảm giác học thuật, phong thủy */
+      font-family: "Times New Roman", Times, "Georgia", serif;
+      font-size: 14px;
+      font-weight: 400; /* Nét chữ thanh mảnh */
+      -webkit-font-smoothing: antialiased;
+      padding: 12px 6px;
+    }
+
+    /* Container chính */
+    .page {
+      width: 100%;
+      max-width: 1000px;
+      margin: 0 auto 16px auto;
+      background: var(--paper);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+    }
+
+    /* Header thanh lịch */
+    .page-header {
+      padding: 16px;
+      background: #fff;
+      border-bottom: 1px solid var(--border);
+    }
+    .page-header .title { font-size: 18px; font-weight: bold; color: var(--accent); letter-spacing: 0.3px; }
+    .page-header .sub { font-size: 13px; color: var(--text-muted); margin-top: 4px; font-weight: 400; }
+
+    .page-body { padding: 16px 12px; }
+
+    /* =========================================
+       THANH CÔNG CỤ (Ngày giờ) - Giống hệt hình
+       ========================================= */
+    .toolbar-wrapper {
+      display: flex;
+      flex-direction: column;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      margin-bottom: 16px;
+      background: #fff;
+    }
+    .toolbar-top {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .toolbar-top label {
+      font-size: 13px; color: var(--text-muted); display: block; margin-bottom: 4px; font-family: sans-serif;
+    }
+    input[type="datetime-local"] {
+      width: 100%; height: 34px; padding: 0 10px;
+      border: 1px solid var(--line); border-radius: var(--radius-sm);
+      font-family: sans-serif; font-size: 14px; color: var(--text-main);
+      outline: none; background: #f8fafc; transition: 0.2s;
+    }
+    input[type="datetime-local"]:focus { border-color: var(--accent); background: #fff; }
+    
+    .toolbar-bottom { display: flex; flex-direction: column; }
+    .btn {
+      height: 38px; width: 100%;
+      background: var(--accent); color: #fff; font-weight: normal; font-size: 14px;
+      border: none; cursor: pointer; transition: background 0.2s;
+      font-family: sans-serif;
+    }
+    .btn:hover { background: var(--accent-hover); }
+    .btn.secondary { background: #fff; color: var(--text-main); border-top: 1px solid var(--border); }
+    .btn.secondary:hover { background: #f8fafc; }
+
+    /* =========================================
+       KHỐI THÔNG TIN (INFO) - Lưới 2 cột viền mỏng
+       ========================================= */
+    .info {
+      display: grid;
+      grid-template-columns: 1fr 1fr; /* Luôn 2 cột như hình */
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      margin-bottom: 16px;
+      background: #fff;
+    }
+    .kv {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--line);
+      border-right: 1px solid var(--line);
+      display: flex; flex-direction: column; justify-content: center; gap: 4px;
+    }
+    .kv:nth-child(2n) { border-right: none; }
+    .kv:nth-last-child(-n+2) { border-bottom: none; } /* Bỏ viền dưới hàng cuối */
+    
+    .k { font-size: 13px; color: var(--text-main); font-weight: normal; }
+    .v { font-size: 14px; font-weight: normal; color: var(--text-main); line-height: 1.4; word-break: break-word; }
+
+    /* =========================================
+       BẢNG KỲ MÔN & CÁCH CỤC
+       ========================================= */
+    .boards {
+      display: grid;
+      grid-template-columns: 1fr; /* Mặc định mobile dọc: 1 cột */
+      gap: 16px;
+      width: 100%;
+    }
+    
+    /* Breakpoint cho Fold mở ra (vuông) và iPad/Desktop */
+    @media (min-width: 600px) {
+      .toolbar-wrapper { flex-direction: row; align-items: stretch; }
+      .toolbar-top { flex: 1; border-bottom: none; border-right: 1px solid var(--border); display: flex; align-items: center; gap: 12px; }
+      .toolbar-top label { margin: 0; white-space: nowrap; }
+      .toolbar-bottom { flex-direction: row; width: 250px; }
+      .btn { border-top: none; }
+      .btn.secondary { border-top: none; border-left: 1px solid var(--border); }
+      
+      .boards { grid-template-columns: 1fr 1fr; /* Song song 2 bảng */ }
+    }
+
+    .board {
+      background: #fff; border-radius: var(--radius-md); border: 1px solid var(--border);
+      overflow: hidden; display: flex; flex-direction: column; height: 100%;
+    }
+    .board-head {
+      background: #fdfdfd; padding: 10px 0; text-align: center;
+      border-bottom: 1px solid var(--border);
+    }
+    .board-head h2 { font-size: 15px; font-weight: bold; color: var(--accent); margin: 0; }
+    
+    .grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      background: var(--line); gap: 1px; /* Tạo đường kẻ mảnh giữa các cung */
+      flex: 1; width: 100%;
+    }
+    
+    .cell { background: #fff; display: flex; flex-direction: column; min-height: 80px; }
+    .cell.dim { opacity: 0.4; }
+    .cell-shell { padding: 6px; flex: 1; display: flex; flex-direction: column; justify-content: space-between; gap: 4px; }
+    
+    .cell-topline { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2px; }
+    .meta-chip { font-size: 11px; color: #a1743b; font-weight: normal; }
+    .pos { font-size: 11px; color: var(--text-muted); background: #f8fafc; border: 1px solid var(--border); padding: 1px 4px; border-radius: 4px; }
+    
+    .qm-main { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; text-align: center; align-items: center; }
+    
+    /* Chữ thanh mảnh, cho phép rớt dòng */
+    .qm-value, .qm-gate, .stem-line, .pat {
+      font-size: 13px;
+      font-weight: normal; 
+      color: var(--text-main);
+      white-space: normal; word-break: break-word; line-height: 1.3;
+    }
+    .qm-gate { text-align: center; color: var(--accent); font-weight: bold; margin: 3px 0; }
+    .qm-stems { display: flex; flex-direction: column; gap: 2px; }
+    
+    .pat-wrap { display: flex; flex-direction: column; gap: 4px; }
+    .pat.good { color: var(--good); }
+    .pat.bad { color: var(--bad); }
+    .empty { font-size: 12px; color: var(--text-muted); text-align: center; margin: auto; font-weight: normal; }
+
+    footer { text-align: center; font-size: 12px; color: var(--text-muted); padding: 16px 0 8px 0; font-family: sans-serif; }
+
+    /* =========================================
+       GIAO DIỆN TRANG 2 - LUẬN QUẺ
+       ========================================= */
+    .page-2-header { text-align: center; padding: 16px 0 12px 0; border-bottom: 1px dashed var(--line); margin-bottom: 16px; }
+    .page-2-header h2 { font-size: 16px; font-weight: bold; color: var(--accent); margin: 0; }
+    
+    .topic-layout { display: grid; grid-template-columns: 1fr; gap: 16px; padding: 0 12px 16px 12px; }
+    
+    @media (min-width: 768px) {
+      .topic-layout { grid-template-columns: 1fr 1fr; }
+    }
+    
+    .topic-panel, .result-panel {
+      background: #fff; border: 1px solid var(--border); border-radius: var(--radius-md);
+      overflow: hidden; display: flex; flex-direction: column; box-shadow: var(--shadow-sm);
+    }
+    .topic-panel-head, .result-panel-head, .note-head {
+      background: #fdfdfd; padding: 12px 16px; border-bottom: 1px solid var(--line);
+    }
+    .topic-panel-head label { font-size: 12px; font-weight: normal; color: var(--text-muted); display: block; margin-bottom: 6px; font-family: sans-serif;}
+    select#topicSelect { width: 100%; height: 36px; border-radius: var(--radius-sm); border: 1px solid var(--line); font-family: sans-serif; font-size: 14px; outline: none; background: #fff; }
+    
+    .topic-guide-box, .result-body { padding: 16px; font-size: 14px; line-height: 1.6; color: var(--text-main); min-height: 200px; }
+    .result-panel-head { display: flex; justify-content: space-between; align-items: center; }
+    .result-panel-head span { font-weight: bold; color: var(--accent); font-size: 14px; font-family: sans-serif;}
+    
+    .note-panel { border-top: 1px solid var(--line); background: #fafafa; }
+    .note-head { background: #fdfdfd; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; }
+    .note-head span { font-size: 12px; font-weight: normal; color: var(--text-muted); font-family: sans-serif;}
+    textarea#analysisNote {
+      width: 100%; border: none; background: transparent; padding: 12px 16px;
+      font-family: inherit; font-size: 14px; color: var(--text-main); outline: none; min-height: 80px; resize: vertical;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ========== BẢNG KỲ MÔN ========== -->
+<div class="page page-1">
+  <div class="page-header">
+    <div class="title">Kỳ Môn Độn Giáp – Hà Đồ</div>
+    <div class="sub">Cửu cung Hà Đồ (Khôn=ĐN, Tốn=TN, Ly=7, Đoài=9). Hiệu chỉnh bởi TIEN.TQN</div>
+  </div>
+  <div class="page-body">
+    
+    <!-- Thanh công cụ giống ảnh mẫu -->
+    <div class="toolbar-wrapper">
+      <div class="toolbar-top">
+        <label>Ngày giờ</label>
+        <input id="dt" type="datetime-local" />
+      </div>
+      <div class="toolbar-bottom">
+        <button class="btn" id="btnCalc">Lập bàn</button>
+        <button class="btn secondary" id="btnNow">Bây giờ</button>
+      </div>
+    </div>
+
+    <!-- Khối Info Dashboard -->
+    <div class="info" id="info"></div>
+
+    <!-- Khối Bảng 1/2 Cột tùy kích thước -->
+    <div class="boards">
+      <div class="board">
+        <div class="board-head"><h2>Bảng Kỳ Môn</h2></div>
+        <div class="grid" id="gridQimen"></div>
+      </div>
+      <div class="board">
+        <div class="board-head"><h2>Bảng Cách Cục</h2></div>
+        <div class="grid" id="gridPatterns"></div>
+      </div>
+    </div>
+    <footer>Kỳ Môn Độn Giáp by TIEN.TQN</footer>
+  </div>
+</div>
+
+<!-- ========== BẢNG LUẬN QUẺ ========== -->
+<div class="page page-2">
+  <div class="page-2-header">
+    <h2>Bảng Luận Quẻ Theo Chủ Đề</h2>
+  </div>
+  <div class="topic-layout">
+    
+    <!-- Cột trái: Hướng dẫn -->
+    <div class="topic-panel">
+      <div class="topic-panel-head">
+        <label>Chọn chủ đề xem quẻ</label>
+        <select id="topicSelect">
+          <option value="">-- Chọn chủ đề --</option>
+          <option value="1">1. Cơ thể</option><option value="2">2. Nghề nghiệp</option>
+          <option value="3">3. Thăng chức</option><option value="4">4. Tìm người dẫn đường</option>
+          <option value="5">5. Chuyển việc</option><option value="6">6. Xin việc</option>
+          <option value="7">7. Mua hàng</option><option value="8">8. Bán hàng</option>
+          <option value="9">9. Mở kinh doanh</option><option value="10">10. Hợp tác</option>
+          <option value="11">11. Mua bán BĐS</option><option value="12">12. Đi vay / cho vay</option>
+          <option value="13">13. Đòi nợ</option><option value="14">14. Thi đấu</option>
+          <option value="15">15. Thi cử</option><option value="16">16. Chỗ đỗ xe</option>
+          <option value="17">17. Du lịch</option><option value="18">18. Hôn nhân</option>
+          <option value="19">19. Sinh nở (giới tính)</option><option value="20">20. Sinh nở</option>
+          <option value="21">21. Sức khỏe</option><option value="22">22. Kiện tụng</option>
+          <option value="23">23. Tố tụng hình sự</option><option value="24">24. Đi lạc</option>
+          <option value="25">25. Mất đồ</option><option value="26">26. Thời tiết</option>
+        </select>
+      </div>
+      <div id="topicGuide" class="topic-guide-box">
+        <div style="color:var(--text-muted);text-align:center;padding:40px 0;font-family: sans-serif;">Vui lòng chọn chủ đề để xem hướng dẫn</div>
+      </div>
+    </div>
+
+    <!-- Cột phải: Kết quả luận quẻ -->
+    <div class="result-panel">
+      <div class="result-panel-head">
+        <span>Luận Quẻ</span>
+        <button id="btnReAnalyze" class="btn secondary" style="height:28px; width: auto; font-size:12px; padding:0 12px; border-radius:4px; border-top: 1px solid var(--border);">Luận lại</button>
+      </div>
+      <div id="analysisResult" class="result-body">
+        <div style="color:var(--text-muted);text-align:center;padding:40px 0;font-family: sans-serif;">Chọn chủ đề để luận quẻ</div>
+      </div>
+      
+      <!-- Box Ghi chú bởi Khầy Dương Minh -->
+      <div class="note-panel">
+        <div class="note-head">
+          <span>Ghi chú</span>
+          <button id="btnClearNote" style="height:24px; width:auto; padding:0 10px; font-size:11px; border:1px solid var(--line); background:#fff; cursor:pointer; color:var(--text-muted); border-radius:4px;">Xóa</button>
+        </div>
+        <textarea id="analysisNote" placeholder="Thêm nhận xét, diễn giải riêng..."></textarea>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ==============================================
+     THỨ TỰ NHÚNG CÁC SCRIPT (GIỮ NGUYÊN)
+     ============================================== -->
+<script src="events.js"></script>
+<script src="3meta.js"></script>
+<script src="logichado.js"></script>
+<script src="fixGanZhi.js"></script>
+<script src="logicluanque.js"></script>
+<script src="main.js"></script>
+
+</body>
+</html>
